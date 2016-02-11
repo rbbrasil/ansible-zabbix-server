@@ -1,0 +1,18 @@
+---
+- name: Create fronted path
+  file: path={{ zbx_htdocs }}
+        state=directory
+        owner={{ httpd_os_user }} group={{ httpd_os_group }}
+
+- name: Copy frontend files
+  shell: cp -rp {{ zbx_download_path }}/{{ zbx_tar_filename }}/frontends/php/* {{ zbx_htdocs }}
+
+- name: Set permissions
+  file: path={{ zbx_htdocs }}
+        owner={{ httpd_os_user }} group={{ httpd_os_group }}
+        recurse=yes
+
+- name: Copy Zabbix frontend conf file
+  template: src=templates/zabbix.conf.php.j2
+            dest={{ zbx_htdocs }}/conf/zabbix.conf.php
+            owner={{ httpd_os_user }} group={{ httpd_os_group }}

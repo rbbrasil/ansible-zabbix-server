@@ -1,0 +1,61 @@
+---
+- hosts: "{{ hosts }}"
+
+  tasks:
+    - name: Include vars
+      include_vars: vars/main.yml
+
+    - name: Installs dependencies
+      yum: name={{ item }} state=present
+      with_items:
+        - "{{ zbx_support_pkgs }}"
+
+    - name: Unarchive source code
+      unarchive: src=files/{{ zbx_tar_filename }}.tar.gz copy=yes
+                 dest={{ zbx_download_path }}
+                 owner={{ zbx_os_user_server }}
+                 group={{ zbx_os_group_server }}
+
+    - name: Compile it
+      shell: ./configure {{ zbx_compilation_params }}
+             chdir={{ zbx_download_path }}/{{ zbx_tar_filename }}
+
+    - name: Install it
+      shell: make install
+             chdir={{ zbx_download_path }}/{{ zbx_tar_filename }}
+
+    - name: Configure Zabbix agentd and server
+      template: src=templates/{{ item.src }}
+                dest={{ item.dest }}
+      with_items:
+        - { src: 'zabbix_agentd.conf.j2', dest: '{{ zbx_agentd_cfg_file }}' }
+        - { src: 'zabbix_server.conf.j2', dest: '{{ zbx_server_cfg_file }}' }
+
+    - name: Configure logging for Zabbix Server
+      file: path=/var/log/zabbix-server state=directory
+            owner={{ zbx_os_user_server }} group={{ zbx_os_group_server }}
+
+    - name: Configure logging for Zabbix Agentd
+      file: path=/var/log/zabbix-agentd state=directory
+            owner={{ zbx_os_user_agentd }} group={{ zbx_os_group_agentd }}
+
+    - name: Create PHP ini file for Zabbix - /etc/php.d/zabbix.ini
+      copy: src=files/etc_php.d_zabbix.ini
+            dest=/etc/php.d/zabbix.ini
+
+    - name: Install MySQL server
+      include: tasks/mysql.yml
+
+    - name: Install Zabbix frontend
+      include: tasks/frontend.yml
+
+    - name: Configure startup scripts
+      include: tasks/startup-scripts.yml
+
+    - name: Restart services
+      service: name={{ item }} state=restarted
+      with_items:
+        - httpd
+        - mariadb
+        - zabbix-server
+        - zabbix-agentd

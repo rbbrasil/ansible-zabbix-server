@@ -1,0 +1,46 @@
+---
+- name: Start MariaDB server
+  service: name=mariadb state=started enabled=yes
+
+- name: Update root user password
+  mysql_user: name=root host={{ item }} password={{ mysql_root_passwd }}
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Copy .my.cnf to /root
+  template: src=templates/root_.my.cnf.j2
+            dest=/root/.my.cnf
+            owner=root group=root mode=0400
+
+- name: Ensure absence of anonymous user
+  mysql_user: name='' host={{ item }} state=absent
+  with_items:
+    - localhost
+    - "{{ ansible_hostname }}"
+
+- name: Remove "test" database
+  mysql_db: name=test state=absent
+
+- name: Create {{ zbx_db_name }} database
+  mysql_db: name={{ zbx_db_name }} state=present
+            encoding=utf8
+  register: zabbix_db_created
+
+- name: Create user {{ zbx_db_username }} as owner of {{ zbx_db_name }} db
+  mysql_user: name={{ zbx_db_username }} password={{ zbx_db_password }}
+              priv={{ zbx_db_name }}.*:ALL state=present
+
+- name: Import Zabbix schema
+  mysql_db: state=import name={{ zbx_db_name }}
+            target={{ item }}
+  with_items:
+    - "{{ zbx_db_files }}/schema.sql"
+    - "{{ zbx_db_files }}/images.sql"
+    - "{{ zbx_db_files }}/data.sql"
+  when: zabbix_db_created.changed == True
+
+- name: Configure service
+  copy: src=files/etc_my.cnf dest=/etc/my.cnf

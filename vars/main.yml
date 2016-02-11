@@ -1,0 +1,72 @@
+---
+#
+# Zabbix vars
+#
+zbx_download_path: /opt
+
+zbx_htdocs: /var/www/html/zabbix
+
+zbx_tar_filename: zabbix-3.0.0
+zbx_compilation_params: "--enable-server --enable-agent --with-mysql --enable-ipv6 --with-net-snmp --with-libcurl --with-libxml2 --with-ssh2"
+
+zbx_agentd_cfg_file: /usr/local/etc/zabbix_agentd.conf
+zbx_server_cfg_file: /usr/local/etc/zabbix_server.conf
+
+zbx_server_hostname: "{{ ansible_fqdn }}"
+zbx_server_port: 10051
+
+zbx_server_script: /usr/local/sbin/zabbix_server
+zbx_agentd_script: /usr/local/sbin/zabbix_agentd
+
+zbx_os_user_server: zabbix-server
+zbx_os_user_agentd: zabbix-agent
+zbx_os_group_server: "{{ zbx_os_user_server }}"
+zbx_os_group_agentd: "{{ zbx_os_user_agentd }}"
+
+httpd_os_user: apache
+httpd_os_group: apache
+
+zbx_support_pkgs:
+        - httpd
+        - httpd-devel
+        - php
+        - php-ldap
+        - php-gd
+        - php-xml
+        - php-mbstring
+        - php-bcmath
+        - php-pdo
+        - php-cli
+        - php-common
+        - php-pear
+        - php-devel
+        - php-mysql
+        - mariadb
+        - mariadb-devel
+        - mariadb-server
+        - gcc
+        - gcc-c++
+        - make
+        - autoconf
+        - net-snmp-devel
+        - openldap-devel
+        - gnutls-devel
+        - curl-devel
+        - libxml2-devel
+        - libssh2-devel
+        - gettext
+        - MySQL-python
+
+
+#
+# MySQL vars
+#
+mysql_root_passwd: "supersecret"
+
+zbx_db_server: localhost
+zbx_db_name: zabbix
+zbx_db_username: zabbix
+zbx_db_password: "secret"
+zbx_db_port: 3306
+
+zbx_db_files: "{{ zbx_download_path }}/{{ zbx_tar_filename }}/database/mysql"

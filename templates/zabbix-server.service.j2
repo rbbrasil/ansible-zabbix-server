@@ -1,0 +1,16 @@
+[Unit]
+Description=Zabbix Server
+After=syslog.target
+After=network.target
+
+[Service]
+Environment="CONFFILE={{ zbx_server_cfg_file }}"
+EnvironmentFile=-/etc/sysconfig/zabbix-server
+Type=forking
+Restart=always
+PIDFile=/run/zabbix-server/zabbix_server.pid
+KillMode=process
+ExecStart={{ zbx_server_script }} -c $CONFFILE
+
+[Install]
+WantedBy=multi-user.target

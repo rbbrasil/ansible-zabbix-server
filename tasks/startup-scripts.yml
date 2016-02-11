@@ -1,0 +1,18 @@
+---
+- name: Create runtime dir for Zabbix Server
+  file: path=/run/zabbix-server state=directory
+        owner={{ zbx_os_user_server }} group={{ zbx_os_group_server }}
+
+- name: Create runtime dir for Zabbix Agentd
+  file: path=/run/zabbix-agentd state=directory
+        owner={{ zbx_os_user_agentd }} group={{ zbx_os_group_agentd }}
+
+- name: Copy Zabbix Server unit file
+  template: src=templates/zabbix-server.service.j2
+            dest=/etc/systemd/system/zabbix-server.service
+            mode=0664
+
+- name: Copy Zabbix Agentd unit file
+  template: src=templates/zabbix-agentd.service.j2
+            dest=/etc/systemd/system/zabbix-agentd.service
+            mode=0664

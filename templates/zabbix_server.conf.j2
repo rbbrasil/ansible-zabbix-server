@@ -1,0 +1,28 @@
+User={{ zbx_os_user_server }}
+
+ListenPort={{ zbx_server_port }}
+
+DBHost=localhost
+DBName={{ zbx_db_name }}
+DBUser={{ zbx_db_username }}
+DBPassword={{ zbx_db_password }}
+DBSocket=/var/lib/mysql/mysql.sock
+DBPort={{ zbx_db_port }}
+
+AlertScriptsPath=/usr/lib/zabbix/alertscripts
+ExternalScripts=/usr/lib/zabbix/externalscripts
+
+PidFile=/run/zabbix-server/zabbix_server.pid
+
+DebugLevel=3
+LogFile=/var/log/zabbix-server/zabbix_server.log
+LogFileSize=10
+
+StartPollers=50
+StartPollersUnreachable=5
+StartTrappers=10
+StartPingers=5
+StartSNMPTrapper=1
+CacheSize=64M
+StartDBSyncers=8
+Timeout=25
