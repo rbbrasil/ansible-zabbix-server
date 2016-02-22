@@ -1,4 +1,7 @@
 ---
+- name: Configure service
+  copy: src=files/etc_my.cnf dest=/etc/my.cnf
+
 - name: Start MariaDB server
   service: name=mariadb state=started enabled=yes
 
@@ -41,6 +44,3 @@
     - "{{ zbx_db_files }}/images.sql"
     - "{{ zbx_db_files }}/data.sql"
   when: zabbix_db_created.changed == True
-
-- name: Configure service
-  copy: src=files/etc_my.cnf dest=/etc/my.cnf
