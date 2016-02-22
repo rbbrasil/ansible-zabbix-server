@@ -8,7 +8,9 @@
         owner={{ zbx_os_user_agentd }} group={{ zbx_os_group_agentd }}
 
 - name: Copy Zabbix unit files
-  templates: src={{ item.src }} dest={{ item.dest }} mode=0664
+  templates: src=templates/{{ item.src }}
+             dest=/etc/systemd/system/{{ item.dest }}
+             mode=0664
   with_items:
-    - { src: 'templates/zabbix-server.service.j2', dest: '/etc/systemd/system/zabbix-server.service' }
-    - { src: 'templates/zabbix-agentd.service.j2', dest: '/etc/systemd/system/zabbix-agentd.service' }
+    - { src: 'zabbix-server.service.j2', dest: 'zabbix-server.service' }
+    - { src: 'zabbix-agentd.service.j2', dest: 'zabbix-agentd.service' }
