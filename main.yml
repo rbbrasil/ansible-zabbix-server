@@ -64,6 +64,9 @@
     - name: Configure startup scripts
       include: tasks/startup-scripts.yml
 
+    - name: Set SELinux policy
+      selinux: policy=targeted state=permissive
+
     - name: Restart services
       service: name={{ item }} state=restarted enabled=yes
       with_items:
