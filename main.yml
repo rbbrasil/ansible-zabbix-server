@@ -10,6 +10,18 @@
       with_items:
         - "{{ zbx_support_pkgs }}"
 
+    - name: Create Zabbix groups
+      group: name={{ item }} state=present
+      with_items:
+        - "{{ zbx_os_group_server }}"
+        - "{{ zbx_os_group_agentd }}"
+
+    - name: Create Zabbix users
+      user: name={{ item.user }} group={{ item.group }}
+      with_items:
+        - { user: '{{ zbx_os_user_server }}', group: '{{ zbx_os_group_server }}' }
+        - { user: '{{ zbx_os_user_agentd }}', group: '{{ zbx_os_group_agentd }}' }
+
     - name: Unarchive source code
       unarchive: src=files/{{ zbx_tar_filename }}.tar.gz copy=yes
                  dest={{ zbx_download_path }}
