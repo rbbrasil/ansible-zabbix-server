@@ -1,0 +1,36 @@
+---
+zbx_htdocs: /var/www/html/zabbix
+
+httpd_os_user: apache
+httpd_os_group: apache
+
+zbx_support_pkgs:
+        - httpd
+        - httpd-devel
+        - php
+        - php-ldap
+        - php-gd
+        - php-xml
+        - php-mbstring
+        - php-bcmath
+        - php-pdo
+        - php-cli
+        - php-common
+        - php-pear
+        - php-devel
+        - php-mysql
+        - mariadb
+        - mariadb-devel
+        - mariadb-server
+        - gcc
+        - gcc-c++
+        - make
+        - autoconf
+        - net-snmp-devel
+        - openldap-devel
+        - gnutls-devel
+        - curl-devel
+        - libxml2-devel
+        - libssh2-devel
+        - gettext
+        - MySQL-python

@@ -2,8 +2,11 @@
 - hosts: "{{ hosts }}"
 
   tasks:
-    - name: Include vars
-      include_vars: vars/main.yml
+    - name: Include common vars
+      include_vars: vars/common.yml
+
+    - name: Include distro-based vars
+      include_vars: vars/{{ ansible_os_family }}.yml
 
     - name: Installs dependencies
       yum: name={{ item }} state=present

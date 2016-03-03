@@ -1,10 +1,7 @@
 ---
-#
 # Zabbix vars
 #
 zbx_download_path: /opt
-
-zbx_htdocs: /var/www/html/zabbix
 
 zbx_tar_filename: zabbix-3.0.0
 zbx_compilation_params: "--enable-server --enable-agent --with-mysql --enable-ipv6 --with-net-snmp --with-libcurl --with-libxml2 --with-ssh2"
@@ -23,42 +20,6 @@ zbx_os_user_agentd: zabbix-agent
 zbx_os_group_server: "{{ zbx_os_user_server }}"
 zbx_os_group_agentd: "{{ zbx_os_user_agentd }}"
 
-httpd_os_user: apache
-httpd_os_group: apache
-
-zbx_support_pkgs:
-        - httpd
-        - httpd-devel
-        - php
-        - php-ldap
-        - php-gd
-        - php-xml
-        - php-mbstring
-        - php-bcmath
-        - php-pdo
-        - php-cli
-        - php-common
-        - php-pear
-        - php-devel
-        - php-mysql
-        - mariadb
-        - mariadb-devel
-        - mariadb-server
-        - gcc
-        - gcc-c++
-        - make
-        - autoconf
-        - net-snmp-devel
-        - openldap-devel
-        - gnutls-devel
-        - curl-devel
-        - libxml2-devel
-        - libssh2-devel
-        - gettext
-        - MySQL-python
-
-
-#
 # MySQL vars
 #
 mysql_root_passwd: "supersecret"

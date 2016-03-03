@@ -1,0 +1,5 @@
+---
+zbx_htdocs: /var/www/zabbix
+
+httpd_os_user: www-data
+httpd_os_group: www-data
